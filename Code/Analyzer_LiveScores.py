@@ -8,7 +8,6 @@ import Global
 Compile regexes
 '''
 Re_Match = re.compile(Global.Regex_Match, re.I)
-Re_Standing = re.compile(Global.Regex_Standing, re.I)
 
 
 def GetLiveScoresContent(league):
@@ -29,8 +28,7 @@ def GetMatchID(league):
 	返回dict(key[id], value[url])
 	'''
 	matches = {}
-	contentStanding = Re_Standing.findall(GetLiveScoresContent(league))[0]
-	contentMatches = Re_Match.finditer(contentStanding)
+	contentMatches = Re_Match.finditer(GetLiveScoresContent(league))
 
 	for s in contentMatches:
 		url = Global.Url_WhoScored_Match + s.group('ID') + Global.Url_WhoScored_LiveStat

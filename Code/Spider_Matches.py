@@ -6,6 +6,8 @@ import Global
 import Analyzer_LiveScores
 from ThreadPool import ThreadPool
 
+MatchNumber_Completed = 0
+MatchNumber_Total = 0
 
 def EnsureDirectory(dir):
 	'''
@@ -19,10 +21,11 @@ def GetPageText(params):
 	'''
 	从网页抓取Html，并写入目标路径的文件
 	'''
+	global MatchNumber_Completed
+	global MatchNumber_Total
 	dir = params[0]
-	fileName = params[1]
+	matchID = params[1]
 	url = params[2]
-	info = params[3]
 	
 	try:
 		req = urllib.request.Request(url = url, headers = Global.Header_Mozilla)
@@ -35,31 +38,15 @@ def GetPageText(params):
 		text = text.replace('\n', '')
 		
 		EnsureDirectory(dir)
-		fileLiveScores = open(dir + '\\' + fileName, 'w', encoding = Global.Encoding_WhoScored)
+		fileLiveScores = open(dir + '\\' + matchID + '.txt', 'w', encoding = Global.Encoding_WhoScored)
 		fileLiveScores.write(text)
 		fileLiveScores.close()
-		print(info)
 		
-	except Exception as e:
-		print(e)
-		return 0
+		MatchNumber_Completed += 1
+		print('Match ' + matchID + ' downloading success! ( ' + str(MatchNumber_Completed) + ' / ' + str(MatchNumber_Total) + ' )', end = '\r')
 
-		
-def GetLiveScoresPage():
-	'''
-	更新（抓取）所有目标联赛的LiveScores页面
-	'''
-	tp = ThreadPool()
-	print('Start updating LiveScores pages...')
-	
-	for (key, value) in Global.Url_League.items():
-		dirLeague = Global.Dir_Root + key
-		urlLeague = Global.Url_WhoScored_Home + value
-		info = key + ' downloading complete!'
-		tp.add_job(GetPageText, dirLeague, Global.Fn_LiveScores, urlLeague, info)
-	
-	tp.wait_for_complete()
-	print('Updating complete!')
+	except Exception as e:
+		print('Match ' + matchID + ' downloading failure! ( ' + str(MatchNumber_Completed) + ' / ' + str(MatchNumber_Total) + ' )', end = '\r')
 
 
 def GetMatchPage(league, matches):
@@ -70,15 +57,16 @@ def GetMatchPage(league, matches):
 	print('Start updating ' + league + ' matches...')
 	dirLeague = Global.Dir_Root + league
 	
-	for key in sorted(matches.keys()):
-		
-		fnMatch = '\\' + key + '.txt'
-		urlMatch = matches.get(key)
-		info = 'Match ' + key + ' downloading complete!'
-		tp.add_job(GetPageText, dirLeague, fnMatch, urlMatch, info)
-		
+	for matchID in sorted(matches.keys()):
+		urlMatch = matches.get(matchID)
+		tp.add_job(GetPageText, dirLeague, matchID, urlMatch, len(matches))
+	
 	tp.wait_for_complete()
-	print(league + ' updating complete!')
+	
+	if len(matches) > 0:
+		print('\n' +league + ' updating complete!\n')
+	else:
+		print(league + ' updating complete!\n')
 
 		
 def GetOriginalMatchID(league):
@@ -102,9 +90,14 @@ def GetMatchID(league):
 	'''
 	通过对比，获取指定联赛尚未抓取的MatchID
 	'''
+	global MatchNumber_Completed
+	global MatchNumber_Total
 	MatchesNeedToDownload = {}
 	MatchesOriginal = GetOriginalMatchID(league)
 	MatchesAll = Analyzer_LiveScores.GetMatchID(league)
+	
+	MatchNumber_Completed = len(MatchesOriginal)
+	MatchNumber_Total = len(MatchesAll)
 	
 	for key in MatchesAll.keys():
 		bOriginal = False
@@ -120,46 +113,14 @@ def GetMatchID(league):
 	return MatchesNeedToDownload
 
 
-def test_job(params):
-	
-	dirLeague = params[0]
-	match = params[1]
-	url = params[2]
-	
-	fnMatch = '\\' + match + '.txt'
-	print(url)
-	
-	fileMatch = open(dirLeague + fnMatch, 'w', encoding = Global.Encoding_WhoScored)
-	fileMatch.write(GetPageText(url))
-	fileMatch.close()
-	
-	
-def test(league):
-	
-	matches = GetMatchID(league)
-	dirLeague = Global.Dir_Root + league
-	EnsureDirectory(dirLeague)
-	
-	print('Start downloading...')
-	tp = ThreadPool()
-	
-	for key in sorted(matches.keys()):
-		tp.add_job(test_job, dirLeague, key, matches.get(key))
-	
-	tp.wait_for_complete()
-	print('End downloading!')
-
-
 if __name__ == '__main__':
 	'''
 	自动抓取所有目标联赛
 	'''
 	t = time.time()
-	if Global.UpdateLiveScores:
-		GetLiveScoresPage()
 	
-	for (key, value) in Global.Url_League.items():
-		matches = GetMatchID(key)
-		GetMatchPage(key, matches)
+	for league in Global.Url_League.keys():
+		matches = GetMatchID(league)
+		GetMatchPage(league, matches)
 	
 	print('s:'+str(time.time()-t))
