@@ -14,7 +14,7 @@ def GetLiveScoresContent(league):
 	'''
 	读取LiveScores.txt
 	'''
-	fpLiveScores = Global.Dir_Root + league + '\\' + Global.Fn_LiveScores
+	fpLiveScores = Global.Dir_Root_1314 + league + '\\' + Global.Fn_LiveScores
 	fileLiveScores = open(fpLiveScores, 'r')
 	content = fileLiveScores.read()
 	fileLiveScores.close()

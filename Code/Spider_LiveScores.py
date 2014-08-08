@@ -43,7 +43,7 @@ def GetLiveScores(league):
 	'''
 	下载指定联赛每周的比赛结果
 	'''
-	dir = Global.Dir_Root + league
+	dir = Global.Dir_Root_1314 + league
 	
 	#  2013年（第25周~第52周）
 	for week in range(25, 53):

@@ -1,27 +1,16 @@
 import re
+import Global
 import Analyzer_Team
 
 
-Dir_Root = 'E:\\WhoScoredRoot\\'
-Regex_MatchInfo = '(?<=var\sinitialData\s=\s\[\[\[)(?P<HTID>\d+),(?P<ATID>\d+),\'(?P<HT>\w+)\',\'(?P<AT>\w+)\',\'(?P<Time>\S+\s\S+)\',\'.*?(?:\])'
 Regex_Team = ''
-Re_MatchInfo = re.compile(Regex_MatchInfo, re.I)
+Re_MatchInfo = re.compile(Global.Regex_MatchInfo, re.I)
 Re_Team = re.compile(Regex_Team, re.I)
-
-
-class MatchInfo:
-	ID = ''
-	StartTime = ''
-	League = ''
-	HomeTeam_ID = ''
-	HomeTeam = ''
-	AwayTeam_ID = ''
-	AwayTeam = ''
 
 
 def GetMatchContent(league, matchID):
 	
-	fpMatch = Dir_Root + league + '\\' + matchID + '.txt'
+	fpMatch = Global.Dir_Root_1314 + league + '\\' + matchID + '.txt'
 	fileMatch = open(fpMatch, 'r')
 	content = fileMatch.read()
 	fileMatch.close()
@@ -33,23 +22,24 @@ def GetMatchInfo(league, matchID):
 
 	contentMatch = GetMatchContent(league, matchID)
 	
-	matchInfo = MatchInfo()
-	matchInfo.ID = matchID
-	matchInfo.League = league
+	matchInfo = Global.MatchInfo()
+	matchInfo.id = matchID
+	matchInfo.league = league
 
 	contentMatchInfo = Re_MatchInfo.finditer(contentMatch)
 	for s in contentMatchInfo:
-		matchInfo.StartTime = s.group('Time')
-		matchInfo.HomeTeam_ID = s.group('HTID')
-		matchInfo.HomeTeam = s.group('HT')
-		matchInfo.AwayTeam_ID = s.group('ATID')
-		matchInfo.AwayTeam = s.group('AT')
+		matchInfo.startTime = s.group('Time')
+		matchInfo.homeTeamID = s.group('HTID')
+		matchInfo.homeTeam = s.group('HT')
+		matchInfo.awayTeamID = s.group('ATID')
+		matchInfo.awayTeam = s.group('AT')
 		break
 	
-	Analyzer_Team.GetTeamStat(matchInfo.HomeTeam_ID, matchInfo.HomeTeam, contentMatch)
-	Analyzer_Team.GetTeamStat(matchInfo.AwayTeam_ID, matchInfo.AwayTeam, contentMatch)
+	homeTeamStat = Analyzer_Team.GetTeamStat(matchInfo.homeTeamID, matchInfo.homeTeam, True, contentMatch)
 	
-	return matchInfo
+	for key in homeTeamStat.__dict__:
+		print(key + ' : ' + str(homeTeamStat.__dict__[key]))
+#	Analyzer_Team.GetTeamStat(matchInfo.AwayTeam_ID, matchInfo.AwayTeam, contentMatch)
 
 
 if __name__ == '__main__':
