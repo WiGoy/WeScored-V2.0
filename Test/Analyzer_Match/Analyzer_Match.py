@@ -1,11 +1,8 @@
 import re
-import Global
-import Analyzer_Team
+import Global, Analyzer_Team, Analyzer_Player
 
 
-Regex_Team = ''
 Re_MatchInfo = re.compile(Global.Regex_MatchInfo, re.I)
-Re_Team = re.compile(Regex_Team, re.I)
 
 
 def GetMatchContent(league, matchID):
@@ -21,29 +18,31 @@ def GetMatchContent(league, matchID):
 def GetMatchInfo(league, matchID):
 
 	contentMatch = GetMatchContent(league, matchID)
+	contentMatchInfo = Re_MatchInfo.findall(contentMatch)[0].replace('[','').replace('\'','').replace(']','').split(',')
 	
 	matchInfo = Global.MatchInfo()
 	matchInfo.id = matchID
 	matchInfo.league = league
-
-	contentMatchInfo = Re_MatchInfo.finditer(contentMatch)
-	for s in contentMatchInfo:
-		matchInfo.startTime = s.group('Time')
-		matchInfo.homeTeamID = s.group('HTID')
-		matchInfo.homeTeam = s.group('HT')
-		matchInfo.awayTeamID = s.group('ATID')
-		matchInfo.awayTeam = s.group('AT')
-		break
+	matchInfo.season = '1314'
+	matchInfo.homeTeamID = contentMatchInfo[0]
+	matchInfo.awayTeamID = contentMatchInfo[1]
+	matchInfo.homeTeam = contentMatchInfo[2]
+	matchInfo.awayTeam = contentMatchInfo[3]
+	matchInfo.startTime = contentMatchInfo[4]
 	
+	homeTeamStat = Analyzer_Team.GetTeamStat(matchInfo.homeTeamID, matchInfo.homeTeam, True, contentMatch)
+	homePlayerStat = Analyzer_Player.GetPlayerStat(matchInfo.homeTeamID, matchInfo.homeTeam, True, contentMatch)
+	
+	'''
 	homeTeamStat = Analyzer_Team.GetTeamStat(matchInfo.homeTeamID, matchInfo.homeTeam, True, contentMatch)
 	
 	for key in homeTeamStat.__dict__:
 		print(key + ' : ' + str(homeTeamStat.__dict__[key]))
-#	Analyzer_Team.GetTeamStat(matchInfo.AwayTeam_ID, matchInfo.AwayTeam, contentMatch)
+	'''
 
 
 if __name__ == '__main__':
 	league = 'England_BarclaysPL'
-	matchID = '720750'
+	matchID = '719920'
 	
 	GetMatchInfo(league, matchID)

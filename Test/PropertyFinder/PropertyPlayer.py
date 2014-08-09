@@ -59,6 +59,16 @@ def GetMatchContent(league, matchID):
 	return content
 	
 
+def GetTeamStatistics(teamID, teamName, home, content):
+
+	regex_HomeTeam = '(?<=\[' + teamID + ',\'' + teamName + '\',).*?(?:\]\]\]\],\[\d+)'
+	regex_AwayTeam = '(?<=\[' + teamID + ',\'' + teamName + '\',).*?(?:\]\]\]\]\])'
+	re_TeamStat = re.compile(regex_HomeTeam, re.I) if home else re.compile(regex_AwayTeam, re.I)
+	contentTeamStat = re_TeamStat.findall(content)[0]
+	
+	return contentTeamStat
+	
+	
 def GetPlayerStatistics(content):
 
 	contentProperty = Re_Property.findall(content)
@@ -72,9 +82,13 @@ def GetProperty(league, matchID):
 	print('Analyzing match ' + matchID, end = '\r')
 	contentMatch = GetMatchContent(league, matchID)
 	contentMatchInfo = Re_MatchInfo.findall(contentMatch)[0].replace('[','').replace('\'','').replace(']','').split(',')
-	contentPlayers = Re_PlayerStatistics.findall(contentMatch)
 	
-	for content in contentPlayers:
+	contentHomeTeamPlayers = Re_PlayerStatistics.findall(GetTeamStatistics(contentMatchInfo[0], contentMatchInfo[2], True, contentMatch))
+	for content in contentHomeTeamPlayers:
+		GetPlayerStatistics(content)
+		
+	contentAwayTeamPlayers = Re_PlayerStatistics.findall(GetTeamStatistics(contentMatchInfo[1], contentMatchInfo[3], False, contentMatch))
+	for content in contentAwayTeamPlayers:
 		GetPlayerStatistics(content)
 
 
@@ -84,5 +98,5 @@ if __name__ == '__main__':
 		matches = GetMatchIDs(league)
 		for matchID in matches:
 			GetProperty(league, matchID)
-
+	
 	OutputProperty_Class()

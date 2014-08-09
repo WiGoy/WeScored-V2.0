@@ -2,7 +2,10 @@ import re
 import Global
 
 
-def GetTeamContent(league, matchID):
+Re_PlayerStatistics = re.compile(Global.Regex_PlayerStatistics, re.I)
+
+
+def GetPlayerContent(league, matchID):
 	
 	matchContent = GetMatchContent(league, matchID)
 	print(matchContent)
@@ -15,29 +18,33 @@ def GetStat(regex, content):
 	stat = re_Stat.findall(content)
 	
 	if len(stat) > 0:
-		return float(stat[0])
+		if regex == 'position':
+			return stat[0]
+		else:
+			return float(stat[0])
 	else:
 		return float(0)
 
 
-def GetTeamStat(teamID, teamName, home, content):
+def GetPlayerStat(teamID, teamName, home, content):
 	
-	teamStat = Global.TeamStatistics()
+	playerStatList = []
 	
-	regex_TeamStat = '(?:\[' + teamID + ',\'' + teamName + '\',).*?(?:\]\]\]\])'
-	regex_TeamRating = '(?:\[' + teamID + ',\'' + teamName + '\',(?P<Rating>\d?.?\d+),).*?(?:\]\]\]\])'
-	re_TeamStat = re.compile(regex_TeamStat, re.I)
-	re_TeamRating = re.compile(regex_TeamRating, re.I)
-	
+	regex_HomeTeam = '(?<=\[' + teamID + ',\'' + teamName + '\',).*?(?:\]\]\]\],\[\d+)'
+	regex_AwayTeam = '(?<=\[' + teamID + ',\'' + teamName + '\',).*?(?:\]\]\]\]\])'
+	re_TeamStat = re.compile(regex_HomeTeam, re.I) if home else re.compile(regex_AwayTeam, re.I)
 	contentTeamStat = re_TeamStat.findall(content)[0]
-	teamStat.rating = re_TeamRating.findall(contentTeamStat)[0]
+	contentPlayerStat = Re_PlayerStatistics.findall(contentTeamStat)
 	
-	for key in teamStat.__dict__:
-		teamStat.__dict__[key] = GetStat(key, contentTeamStat)
+	for content in contentPlayerStat:
+		playerStat = Global.PlayerStatistics()
+		for key in playerStat.__dict__:
+			playerStat.__dict__[key] = GetStat(key, content)
+		
+		contentPlayerInfo = content.replace('[','').replace('\'','').replace(']','').split(',')
+		playerStat.id = contentPlayerInfo[0]
+		playerStat.name = contentPlayerInfo[1]
+		
+		playerStatList.append(playerStat)
 	
-	teamStat.id = teamID
-	teamStat.name = teamName
-	teamStat.home = home
-	teamStat.rating = re_TeamRating.findall(contentTeamStat)[0]
-	
-	return teamStat
+	return playerStatList
