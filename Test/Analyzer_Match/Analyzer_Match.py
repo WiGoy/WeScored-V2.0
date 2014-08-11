@@ -46,6 +46,9 @@ def GetMatchInfo(league, matchID):
 		matchInfo.homeTeamPoints = 0
 		matchInfo.awayTeamPoints = 3
 	
+	matchInfo.manOfTheMatchPlayerID = 0
+#	matchInfo.manOfTheMatchPlayerName = ' '
+	
 	for playerStat in matchInfo.homeTeamPlayerStat:
 		if playerStat.man_of_the_match == 1:
 			matchInfo.manOfTheMatchPlayerID = playerStat.id

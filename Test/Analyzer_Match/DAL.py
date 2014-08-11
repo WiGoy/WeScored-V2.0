@@ -11,9 +11,10 @@ def ConnectDB():
 
 def InsertMatchInfo(cursorObj, matchInfo):
 
-	insertStr = 'INSERT INTO MatchInformation (match_id, start_time, league, home_team_id, home_team_name, home_team_rating, home_team_goals_for, home_team_points, away_team_id, away_team_name, away_team_rating, away_team_goals_for, away_team_points, man_of_the_match_player_id, man_of_the_match_player_name) VALUES (' + ')'
+	insertStr = 'INSERT INTO MatchInformation VALUES (' + str(matchInfo.id) + ', \"' + matchInfo.startTime + '\", \"' + matchInfo.league + '\", ' + str(matchInfo.homeTeamStat.id) + ', \"' + matchInfo.homeTeamStat.name + '\", ' + str(matchInfo.homeTeamStat.rating) + ', ' + str(matchInfo.homeTeamStat.goals) + ', ' + str(matchInfo.homeTeamPoints) + ', ' + str(matchInfo.awayTeamStat.id) + ', \"' + matchInfo.awayTeamStat.name + '\", ' + str(matchInfo.awayTeamStat.rating) + ', ' + str(matchInfo.awayTeamStat.goals) + ', ' + str(matchInfo.awayTeamPoints) + ', ' + str(matchInfo.manOfTheMatchPlayerID) + ', \"' + matchInfo.manOfTheMatchPlayerName + '\")'
+	
 	cursorObj.execute(insertStr)
-
+	
 	
 def GetMatchIDs(league):
 
@@ -35,13 +36,17 @@ if __name__ == '__main__':
 	
 	t = time.time()
 	
+	conn = sqlite3.connect(Global.Fn_Database)
+	cursorObj = conn.cursor()
+	
 	matches = GetMatchIDs(league)
 	for matchID in matches:
-		
-		if matchID != '720329':
-			continue
-		
+		print(matchID, end = '\r')
 		matchInfo = Analyzer_Match.GetMatchInfo(league, matchID)
-		print(matchInfo.id + ' ' + matchInfo.startTime + ' ' + matchInfo.homeTeamStat.name + ' '  + str(matchInfo.homeTeamPoints) + ' '+ matchInfo.awayTeamStat.name + ' ' + str(matchInfo.awayTeamPoints))# + ' ' + matchInfo.manOfTheMatchPlayerName)
+		InsertMatchInfo(cursorObj, matchInfo)
+		
+	conn.commit()
+	cursorObj.close()
+	conn.close()
 	
 	print('s:'+str(time.time()-t))
