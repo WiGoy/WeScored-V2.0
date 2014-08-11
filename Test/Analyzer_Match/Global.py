@@ -1,6 +1,12 @@
 ﻿Dir_Root_1314 = 'E:\\WhoScoredRoot\\1314\\'
+Fn_LiveScores = 'LiveScores.txt'
+Fn_Database = 'WhoScored.db'
 
 
+Encoding_WhoScored = 'utf-8'
+
+
+Regex_FN_Match = '(?:\d+)'
 Regex_MatchInfo = '(?<=var\sinitialData\s=\s).*?(?:])'
 Regex_PlayerStatistics = '(?:\[\d+\,\').*?(?:\d+,\d+,\d+\])'
 
@@ -11,10 +17,14 @@ class MatchInfo:
 		self.league = ''
 		self.season = ''
 		self.startTime = ''
-		self.homeTeamID = ''
-		self.homeTeam = ''
-		self.awayTeamID = ''
-		self.awayTeam = ''
+		self.homeTeamPoints = ''
+		self.homeTeamStat = ''
+		self.homeTeamPlayerStat = ''
+		self.awayTeamPoints = ''
+		self.awayTeamStat = ''
+		self.awayTeamPlayerStat = ''
+		self.manOfTheMatchPlayerID = ''
+		self.manOfTheMatchPlayerName = ''
 
 
 class TeamStatistics:

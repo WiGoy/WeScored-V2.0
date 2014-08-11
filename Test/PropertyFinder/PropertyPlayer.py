@@ -6,6 +6,7 @@ Property = {}
 Dir_Root_1314 = 'E:\\WhoScoredRoot\\1314\\'
 Fn_LiveScores = 'LiveScores.txt'
 Fn_Property_Class = 'Property_Player_Class.txt'
+Fn_Property_Table = 'Property_Player_Table.txt'
 League = ['England_BarclaysPL', 'England_FLChampionship', 'France_Ligue1', 'Germany_Bundesliga', 'Italy_SerieA', 'Netherlands_Eredivisie', 'Russia_RussianLeague', 'Spain_LigaBBVA']
 Encoding_WhoScored = 'utf-8'
 
@@ -33,6 +34,28 @@ def OutputProperty_Class():
 	
 	fileProperty.close()
 
+
+def OutputProperty_Table():
+	
+	fileProperty = open(Fn_Property_Table, 'w')
+	fileProperty.write('-- ----------------------------\n')
+	fileProperty.write('-- Table structure for PlayerStatistics\n')
+	fileProperty.write('-- ----------------------------\n')
+	fileProperty.write('CREATE TABLE IF NOT EXISTS \"PlayerStatistics\" (\n')
+	fileProperty.write('\"id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n')
+	fileProperty.write('\"player_id\" INTEGER NOT NULL,\n')
+	fileProperty.write('\"player_name\" TEXT(40) NOT NULL,\n')
+	fileProperty.write('\"team_id\" INTEGER NOT NULL,\n')
+	fileProperty.write('\"team_name\" TEXT(40) NOT NULL,\n')
+	fileProperty.write('\"league\" TEXT(40) NOT NULL,\n')
+	fileProperty.write('\"match_id\" INTEGER NOT NULL,\n')
+	fileProperty.write('\"home\" INTEGER NOT NULL,\n')
+	
+	for key in sorted(Property.keys()):
+		fileProperty.write('\"' + key + '\" REAL NOT NULL,\n')
+	
+	fileProperty.write(');\n')
+	fileProperty.close()
 
 
 def GetMatchIDs(league):
@@ -99,4 +122,4 @@ if __name__ == '__main__':
 		for matchID in matches:
 			GetProperty(league, matchID)
 	
-	OutputProperty_Class()
+	OutputProperty_Table()

@@ -3,12 +3,6 @@ import Global
 
 
 Re_PlayerStatistics = re.compile(Global.Regex_PlayerStatistics, re.I)
-
-
-def GetPlayerContent(league, matchID):
-	
-	matchContent = GetMatchContent(league, matchID)
-	print(matchContent)
 	
 	
 def GetStat(regex, content):

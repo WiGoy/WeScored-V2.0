@@ -1,11 +1,5 @@
 import re
 import Global
-
-
-def GetTeamContent(league, matchID):
-	
-	matchContent = GetMatchContent(league, matchID)
-	print(matchContent)
 	
 	
 def GetStat(regex, content):
