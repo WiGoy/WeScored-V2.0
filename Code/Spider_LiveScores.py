@@ -43,24 +43,24 @@ def GetLiveScores(league):
 	'''
 	下载指定联赛每周的比赛结果
 	'''
-	dir = Global.Dir_Root_1314 + league
+	dir = Global.Dir_Root_1415 + league
 	
-	#  2013年（第25周~第52周）
-	for week in range(25, 53):
+	#  2014年（第25周~第52周）
+	for week in range(25, 33):
 		time.sleep(0.5)
-		url = Global.Url_WhoScored_Home + Global.Url_League.get(league) + '2013W' + str(week) + Global.Url_Request_Suffix
+		url = Global.Url_WhoScored_Home + Global.Url_League_1415.get(league) + '2014W' + str(week) + Global.Url_Request_Suffix
 		GetPageText(url, dir)
-	
-	#  2014年（第1周~第30周）
+	'''
+	#  2015年（第1周~第30周）
 	for week in range(1, 30):
 		time.sleep(0.5)
-		url = Global.Url_WhoScored_Home + Global.Url_League.get(league) + '2014W' + str(week) + Global.Url_Request_Suffix
+		url = Global.Url_WhoScored_Home + Global.Url_League_1415.get(league) + '2015W' + str(week) + Global.Url_Request_Suffix
 		GetPageText(url, dir)
-		
+	'''	
 	print(league + ' downloading complete!')
 
 
 if __name__ == '__main__':
 	
-	for league in Global.Url_League.keys():
+	for league in Global.Url_League_1415.keys():
 		GetLiveScores(league)

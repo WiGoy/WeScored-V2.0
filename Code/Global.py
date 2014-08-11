@@ -7,13 +7,14 @@
 路径和文件名
 '''
 Dir_Root_1314 = 'E:\\WhoScoredRoot\\1314\\'
+Dir_Root_1415 = 'E:\\WhoScoredRoot\\1415\\'
 Fn_LiveScores = 'LiveScores.txt'
 
 
 '''
 url
 '''
-Url_League = {
+Url_League_1314 = {
 #	'Brazil_LigaDoBrasil' : '/tournamentsfeed/8677/Fixtures/?d=',
 	'England_BarclaysPL' : '/tournamentsfeed/7794/Fixtures/?d=',
 	'England_FLChampionship' : '/tournamentsfeed/7800/Fixtures/?d=',
@@ -24,6 +25,16 @@ Url_League = {
 	'Russia_RussianLeague' : '/tournamentsfeed/7803/Fixtures/?d=',
 	'Spain_LigaBBVA' : '/tournamentsfeed/7920/Fixtures/?d='
 #	'USA_MLS' : '/tournamentsfeed/8358/Fixtures/?d='
+	}
+Url_League_1415 = {
+	'England_BarclaysPL' : '/tournamentsfeed/9155/Fixtures/?d=',
+	'England_FLChampionship' : '/tournamentsfeed/9156/Fixtures/?d=',
+	'France_Ligue1' : '/tournamentsfeed/9105/Fixtures/?d=',
+	'Germany_Bundesliga' : '/tournamentsfeed/9192/Fixtures/?d=',
+	'Italy_SerieA' : '/tournamentsfeed/11369/Fixtures/?d=',
+	'Netherlands_Eredivisie' : '/tournamentsfeed/9121/Fixtures/?d=',
+	'Russia_RussianLeague' : '/tournamentsfeed/9145/Fixtures/?d=',
+	'Spain_LigaBBVA' : '/tournamentsfeed/11363/Fixtures/?d='
 	}
 Url_Request_Suffix = '&isAggregate=false'
 Url_WhoScored_Home = 'http://www.whoscored.com'

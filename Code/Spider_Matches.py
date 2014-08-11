@@ -55,7 +55,7 @@ def GetMatchPage(league, matches):
 	'''
 	tp = ThreadPool()
 	print('Start updating ' + league + ' matches...')
-	dirLeague = Global.Dir_Root_1314 + league
+	dirLeague = Global.Dir_Root_1415 + league
 	
 	for matchID in sorted(matches.keys()):
 		urlMatch = matches.get(matchID)
@@ -74,7 +74,7 @@ def GetOriginalMatchID(league):
 	获取指定联赛已下载的MatchID（有对应txt文件且大于1024b）
 	'''
 	originalMatchID = []
-	dirLeague = Global.Dir_Root_1314 + league
+	dirLeague = Global.Dir_Root_1415 + league
 	Re_FN_Match = re.compile(Global.Regex_FN_Match, re.I)
 	
 	#  Add match id in original match id list
@@ -119,7 +119,7 @@ if __name__ == '__main__':
 	'''
 	t = time.time()
 	
-	for league in Global.Url_League.keys():
+	for league in Global.Url_League_1415.keys():
 		matches = GetMatchID(league)
 		GetMatchPage(league, matches)
 	
