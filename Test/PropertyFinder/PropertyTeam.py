@@ -7,6 +7,7 @@ Dir_Root_1314 = 'E:\\WhoScoredRoot\\1314\\'
 Fn_LiveScores = 'LiveScores.txt'
 Fn_Property_Class = 'Property_Team_Class.txt'
 Fn_Property_Table = 'Property_Team_Table.txt'
+Fn_Property_Sql = 'Property_Team_Sql.txt'
 League = ['England_BarclaysPL', 'England_FLChampionship', 'France_Ligue1', 'Germany_Bundesliga', 'Italy_SerieA', 'Netherlands_Eredivisie', 'Russia_RussianLeague', 'Spain_LigaBBVA']
 Encoding_WhoScored = 'utf-8'
 
@@ -54,6 +55,22 @@ def OutputProperty_Table():
 	
 	fileProperty.write(');\n')
 	fileProperty.close()
+
+	
+def OutputProperty_Sql():
+	
+	fileProperty = open(Fn_Property_Sql, 'w')
+	
+	sqlTeam1 = '\'INSERT INTO TeamStatistics (team_id, team_name, league, match_id, home, rating'
+	sqlTeam2 = ') VALUES (\' + str(teamStat.id) + \', \\\"\' + teamStat.name + \'\\\", \\\"\' + league + \'\\\", \' + str(matchID) + \', \' + str(home) + \', \' + str(teamStat.rating)'
+	
+	for key in sorted(Property.keys()):
+		sqlTeam1 += ', ' + key
+		sqlTeam2 += ' + \', \' + str(teamStat.' + key + ')'
+	
+	fileProperty.write(sqlTeam1 + sqlTeam2 + ' + \')\'')
+	fileProperty.close()
+
 
 def GetMatchIDs(league):
 
@@ -110,4 +127,4 @@ if __name__ == '__main__':
 		for matchID in matches:
 			GetProperty(league, matchID)
 	
-	OutputProperty_Table()
+	OutputProperty_Sql()

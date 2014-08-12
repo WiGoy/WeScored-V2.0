@@ -64,6 +64,9 @@ def GetMatchInfo(league, matchID):
 
 if __name__ == '__main__':
 	league = 'England_BarclaysPL'
-	matchID = '719920'
+	matchID = '720420'
 	
-	GetMatchInfo(league, matchID)
+	matchInfo = GetMatchInfo(league, matchID)
+	
+	for player in matchInfo.awayTeamPlayerStat:
+		print(player.name)
