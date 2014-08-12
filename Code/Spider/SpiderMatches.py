@@ -2,12 +2,13 @@
 下载LiveScores和所有Match的页面
 '''
 import os, re, time, urllib.request
-import Global
-import Analyzer_LiveScores
+import Global, AnalyzerLiveScores
 from ThreadPool import ThreadPool
+
 
 MatchNumber_Completed = 0
 MatchNumber_Total = 0
+
 
 def EnsureDirectory(dir):
 	'''
@@ -94,7 +95,7 @@ def GetMatchID(league):
 	global MatchNumber_Total
 	MatchesNeedToDownload = {}
 	MatchesOriginal = GetOriginalMatchID(league)
-	MatchesAll = Analyzer_LiveScores.GetMatchID(league)
+	MatchesAll = AnalyzerLiveScores.GetMatchID(league)
 	
 	MatchNumber_Completed = len(MatchesOriginal)
 	MatchNumber_Total = len(MatchesAll)
