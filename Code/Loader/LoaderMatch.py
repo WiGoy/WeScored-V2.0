@@ -8,11 +8,11 @@ import Global, LoaderTeam, LoaderPlayer
 Re_MatchInfo = re.compile(Global.Regex_MatchInfo, re.I)
 
 
-def GetMatchContent(league, matchID):
+def GetMatchContent(season, league, matchID):
 	'''
 	读取本地数据文件
 	'''
-	fpMatch = Global.Dir_Root_1314 + league + '\\' + matchID + '.txt'
+	fpMatch = Global.Dir_Root + season + '\\' + league + '\\' + matchID + '.txt'
 	fileMatch = open(fpMatch, 'r', encoding = Global.Encoding_WhoScored)
 	content = fileMatch.read()
 	fileMatch.close()
@@ -20,11 +20,11 @@ def GetMatchContent(league, matchID):
 	return content
 
 
-def GetMatchInfo(league, matchID):
+def GetMatchInfo(season, league, matchID):
 	'''
 	获取比赛技术统计：包括比赛、两支球队和两支球队的所有参赛球员
 	'''
-	contentMatch = GetMatchContent(league, matchID)
+	contentMatch = GetMatchContent(season, league, matchID)
 	contentMatchInfo = Re_MatchInfo.findall(contentMatch)[0].replace('[','').replace('\'','').replace(']','').split(',')
 	
 	homeTeamID = contentMatchInfo[0]

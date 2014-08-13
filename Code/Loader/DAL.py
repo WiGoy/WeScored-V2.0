@@ -8,6 +8,35 @@ import Global, LoaderMatch
 Re_FN_Match = re.compile(Global.Regex_FN_Match, re.I)
 
 
+def CreateDatabase(fpDatabase):
+	'''
+	新建数据库文件
+	'''
+	strCreate = ''
+	
+	#  如果不存在就创建
+	if not os.path.exists(fpDatabase):
+		fileDatabase = open(fpDatabase, 'w')
+		fileDatabase.close()
+	
+	#  读取sql文件的创建语句
+	if os.path.exists(Global.Fn_Sql):
+		fileSql = open(Global.Fn_Sql, 'r', encoding = Global.Encoding_WhoScored)
+		strCreate = fileSql.read()
+		fileSql.close()
+	else:
+		return
+	
+	#  初始化数据库
+	if os.path.getsize(os.path.join(fpDatabase)) == 0:
+		conn = sqlite3.connect(fpDatabase)
+		cursorObj = conn.cursor()
+		cursorObj.executescript(strCreate)
+		cursorObj.close()
+		conn.close()
+		print('Create new database ' + fpDatabase)
+
+
 def InsertMatchInfo(cursorObj, matchInfo):
 	'''
 	将比赛统计写入数据库
@@ -35,11 +64,11 @@ def InsertPlayerStatistics(cursorObj, matchID, league, home, teamID, teamName, p
 	cursorObj.execute(strInsert)
 
 	
-def UpdateMatchInfo(league, matchID, cursorObj):
+def UpdateMatchInfo(season, league, matchID, cursorObj):
 	'''
 	从文件读取数据，并写入数据库
 	'''
-	matchInfo = LoaderMatch.GetMatchInfo(league, matchID)
+	matchInfo = LoaderMatch.GetMatchInfo(season, league, matchID)
 	InsertMatchInfo(cursorObj, matchInfo)
 	InsertTeamStatistics(cursorObj, matchInfo.id, matchInfo.league, 1, matchInfo.homeTeamStat)
 	InsertTeamStatistics(cursorObj, matchInfo.id, matchInfo.league, 0, matchInfo.awayTeamStat)
@@ -51,16 +80,32 @@ def UpdateMatchInfo(league, matchID, cursorObj):
 		InsertPlayerStatistics(cursorObj, matchInfo.id, matchInfo.league, 0, matchInfo.awayTeamStat.id, matchInfo.awayTeamStat.name, playerStat)
 
 
-def GetMatchIDs(dirLeague):
+def GetLastMatchID(season, league, cursorObj):
+	'''
+	获取指定联赛已导入数据的最后一场MatchID
+	'''
+	strSearch = 'SELECT match_id from MatchInformation where league = \"' + league + '\" ORDER BY match_id DESC'
+	cursorObj.execute(strSearch)
+	lastMatchID = cursorObj.fetchone()
+	
+	if lastMatchID != None:
+		return lastMatchID[0]
+	else:
+		return 0
+
+
+def GetMatchIDs(season, league, cursorObj):
 	'''
 	获取所有比赛的matchID
 	'''
 	matchIDs = []
+	lastMatchID = GetLastMatchID(season, league, cursorObj)
+	dirLeague = Global.Dir_Root + season + '\\' + league
 	
 	#  Add match id in original match id list
 	for root, dirs, files in os.walk(dirLeague):
 		for fn in files:
-			if fn != Global.Fn_LiveScores and os.path.getsize(os.path.join(root, fn)) > 1024:
+			if fn != Global.Fn_LiveScores and os.path.getsize(os.path.join(root, fn)) > 1024 and int(Re_FN_Match.findall(fn)[0]) > lastMatchID:
 				matchIDs.append(Re_FN_Match.findall(fn)[0])
 	
 	return matchIDs

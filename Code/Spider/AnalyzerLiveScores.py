@@ -10,11 +10,11 @@ Compile regexes
 Re_Match = re.compile(Global.Regex_Match, re.I)
 
 
-def GetLiveScoresContent(league):
+def GetLiveScoresContent(season, league):
 	'''
 	读取LiveScores.txt
 	'''
-	fpLiveScores = Global.Dir_Root_1415 + league + '\\' + Global.Fn_LiveScores
+	fpLiveScores = Global.Dir_Root + season + '\\' + league + '\\' + Global.Fn_LiveScores
 	fileLiveScores = open(fpLiveScores, 'r')
 	content = fileLiveScores.read()
 	fileLiveScores.close()
@@ -22,13 +22,13 @@ def GetLiveScoresContent(league):
 	return content
 
 
-def GetMatchID(league):
+def GetMatchID(season, league):
 	'''
 	获取指定联赛的MatchID
 	返回dict(key[id], value[url])
 	'''
 	matches = {}
-	contentMatches = Re_Match.finditer(GetLiveScoresContent(league))
+	contentMatches = Re_Match.finditer(GetLiveScoresContent(season, league))
 
 	for s in contentMatches:
 		url = Global.Url_WhoScored_Match + s.group('ID') + Global.Url_WhoScored_LiveStat

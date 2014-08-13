@@ -50,13 +50,13 @@ def GetPageText(params):
 		print('Match ' + matchID + ' downloading failure! ( ' + str(MatchNumber_Completed) + ' / ' + str(MatchNumber_Total) + ' )', end = '\r')
 
 
-def GetMatchPage(league, matches):
+def GetMatchPage(season, league, matches):
 	'''
 	获取指定联赛的Match页面
 	'''
 	tp = ThreadPool()
-	print('Start updating ' + league + ' matches...')
-	dirLeague = Global.Dir_Root_1415 + league
+	print('Start updating ' + season + ' ' + league + ' matches...')
+	dirLeague = Global.Dir_Root + season + '\\' + league
 	
 	for matchID in sorted(matches.keys()):
 		urlMatch = matches.get(matchID)
@@ -65,17 +65,17 @@ def GetMatchPage(league, matches):
 	tp.wait_for_complete()
 	
 	if len(matches) > 0:
-		print('\n' +league + ' updating complete!\n')
+		print('\n' + season + ' ' +league + ' updating complete!\n')
 	else:
-		print(league + ' updating complete!\n')
+		print(season + ' ' + league + ' updating complete!\n')
 
 		
-def GetOriginalMatchID(league):
+def GetOriginalMatchID(season, league):
 	'''
 	获取指定联赛已下载的MatchID（有对应txt文件且大于1024b）
 	'''
 	originalMatchID = []
-	dirLeague = Global.Dir_Root_1415 + league
+	dirLeague = Global.Dir_Root + season + '\\' + league
 	Re_FN_Match = re.compile(Global.Regex_FN_Match, re.I)
 	
 	#  Add match id in original match id list
@@ -87,15 +87,15 @@ def GetOriginalMatchID(league):
 	return originalMatchID
 	
 	
-def GetMatchID(league):
+def GetMatchID(season, league):
 	'''
 	通过对比，获取指定联赛尚未抓取的MatchID
 	'''
 	global MatchNumber_Completed
 	global MatchNumber_Total
 	MatchesNeedToDownload = {}
-	MatchesOriginal = GetOriginalMatchID(league)
-	MatchesAll = AnalyzerLiveScores.GetMatchID(league)
+	MatchesOriginal = GetOriginalMatchID(season, league)
+	MatchesAll = AnalyzerLiveScores.GetMatchID(season, league)
 	
 	MatchNumber_Completed = len(MatchesOriginal)
 	MatchNumber_Total = len(MatchesAll)

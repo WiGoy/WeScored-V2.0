@@ -1,26 +1,26 @@
-﻿import sqlite3, time
+﻿import sqlite3
 import Global, DAL
+
+
+#  选择赛季
+Season = '1415'
 
 
 if __name__ == '__main__':
 	
-	fpDatabase = Global.Dir_Root_1314 + Global.Fn_Database
+	fpDatabase = Global.Dir_Root + Season + '\\' + Global.Fn_Database
+	DAL.CreateDatabase(fpDatabase)
+	
 	conn = sqlite3.connect(fpDatabase)
 	cursorObj = conn.cursor()
-	
-	t = time.time()
 	
 	for league in Global.League:
 		
 		print('Update league ' + league)
-		dirLeague = Global.Dir_Root_1314 + league
-		matches = DAL.GetMatchIDs(dirLeague)
+		matches = DAL.GetMatchIDs(Season, league, cursorObj)
 		for matchID in matches:
-			DAL.UpdateMatchInfo(league, matchID, cursorObj)
+			DAL.UpdateMatchInfo(Season, league, matchID, cursorObj)
 		
 	conn.commit()
 	cursorObj.close()
 	conn.close()
-	
-	print('Updating complete!')
-	print('s:'+str(time.time()-t))

@@ -6,8 +6,7 @@
 '''
 路径和文件名
 '''
-Dir_Root_1314 = 'E:\\WhoScoredRoot\\1314\\'
-Dir_Root_1415 = 'E:\\WhoScoredRoot\\1415\\'
+Dir_Root = 'E:\\WhoScoredRoot\\'
 Fn_LiveScores = 'LiveScores.txt'
 
 

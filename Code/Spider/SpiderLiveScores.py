@@ -1,8 +1,21 @@
 ﻿'''
 生成所有联赛的LiveScores信息
 '''
-import os, time, urllib.request
+import datetime, os, time, urllib.request
 import Global
+
+
+def DateBefore(year, week):
+	'''
+	判断是否大于当前日期
+	'''
+	nowYear = int(time.strftime("%Y",time.localtime()))
+	nowWeek = int(time.strftime("%W",time.localtime()))
+	
+	if int(year[0:4]) <= nowYear and week <= nowWeek:
+		return True
+	else:
+		return False
 
 
 def EnsureDirectory(dir):
@@ -36,29 +49,38 @@ def GetPageText(url, dir):
 	
 	except Exception as e:
 		print(e)
-		return 0
+		return
 
 		
-def GetLiveScores(league):
+def GetLiveScores(season, league):
 	'''
 	下载指定联赛每周的比赛结果
 	'''
-	dir = Global.Dir_Root_1415 + league
+	dir = Global.Dir_Root + season + '\\' + league
+	urlLeague = Global.Url_League_1314.get(league) if season == '1314' else Global.Url_League_1415.get(league)
+	year1 = '20' + season[0:2] + 'W'
+	year2 = '20' + season[2:4] + 'W'
 	
-	#  2014年（第25周~第52周）
-	for week in range(25, 33):
-		time.sleep(0.5)
-		url = Global.Url_WhoScored_Home + Global.Url_League_1415.get(league) + '2014W' + str(week) + Global.Url_Request_Suffix
-		GetPageText(url, dir)
-	'''
-	#  2015年（第1周~第30周）
+	#  第一年的第25周~第52周
+	for week in range(25, 53):
+		if (DateBefore(year1, week)):
+			url = Global.Url_WhoScored_Home + urlLeague + year1 + str(week) + Global.Url_Request_Suffix
+			GetPageText(url, dir)
+			time.sleep(0.5)
+		else:
+			break
+	
+	#  第二年的第1周~第30周
 	for week in range(1, 30):
-		time.sleep(0.5)
-		url = Global.Url_WhoScored_Home + Global.Url_League_1415.get(league) + '2015W' + str(week) + Global.Url_Request_Suffix
-		GetPageText(url, dir)
-	'''	
+		if (DateBefore(year2, week)):
+			url = Global.Url_WhoScored_Home + urlLeague + year2 + str(week) + Global.Url_Request_Suffix
+			GetPageText(url, dir)
+			time.sleep(0.5)
+		else:
+			break	
+	
 	print(league + ' downloading complete!')
-
+	
 
 if __name__ == '__main__':
 	
