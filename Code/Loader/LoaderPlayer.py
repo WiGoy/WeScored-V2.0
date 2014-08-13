@@ -6,7 +6,17 @@ import Global
 
 
 Re_PlayerStatistics = re.compile(Global.Regex_PlayerStatistics, re.I)
-	
+
+
+def OutputContent(content):
+	'''
+	将分割后的content写入文件，用于测试
+	'''
+	fpTest = 'Test.txt'
+	fileTest = open(fpTest, 'a', encoding = Global.Encoding_WhoScored)
+	fileTest.write(content + '\n')
+	fileTest.close()
+
 	
 def GetStat(regex, content):
 	'''
@@ -38,6 +48,7 @@ def GetPlayerStat(teamID, teamName, home, content):
 	contentPlayerStat = Re_PlayerStatistics.findall(contentTeamStat)
 	
 	for content in contentPlayerStat:
+#		OutputContent(content)
 		playerStat = Global.PlayerStatistics()
 		for key in playerStat.__dict__:
 			playerStat.__dict__[key] = GetStat(key, content)

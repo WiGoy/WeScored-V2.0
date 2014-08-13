@@ -3,7 +3,7 @@ import Global, DAL
 
 
 #  选择赛季
-Season = '1415'
+Season = '1314'
 
 
 if __name__ == '__main__':

@@ -26,7 +26,7 @@ Encoding_WhoScored = 'utf-8'
 
 Regex_FN_Match = '(?:\d+)'
 Regex_MatchInfo = '(?<=var\sinitialData\s=\s).*?(?:])'
-Regex_PlayerStatistics = '(?:\[\d+\,\').*?(?:\],\[)'
+Regex_PlayerStatistics = '(?:\[\d+\,\').*?(?:,\d*,\d*\])'
 
 
 '''

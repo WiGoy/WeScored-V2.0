@@ -35,7 +35,7 @@ def GetMatchInfo(season, league, matchID):
 	matchInfo = Global.MatchInfo()
 	matchInfo.id = matchID
 	matchInfo.league = league
-	matchInfo.season = '1314'
+	matchInfo.season = season
 	matchInfo.startTime = contentMatchInfo[4]
 	
 	matchInfo.homeTeamStat = LoaderTeam.GetTeamStat(homeTeamID, homeTeam, True, contentMatch)
@@ -71,10 +71,19 @@ def GetMatchInfo(season, league, matchID):
 
 
 if __name__ == '__main__':
+	season = '1314'
 	league = 'England_BarclaysPL'
 	matchID = '720420'
 	
-	matchInfo = GetMatchInfo(league, matchID)
+	matchInfo = GetMatchInfo(season, league, matchID)
 	
+	print(len(matchInfo.awayTeamPlayerStat))
 	for player in matchInfo.awayTeamPlayerStat:
 		print(player.name)
+	
+	'''
+	for player in matchInfo.awayTeamPlayerStat:
+		for key in player.__dict__:
+			print(key + ' ' + str(player.__dict__[key]))
+		break
+	'''
