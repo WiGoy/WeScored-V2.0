@@ -32,7 +32,10 @@ def GetStat(regex, content):
 		else:
 			return float(stat[0])
 	else:
-		return float(0)
+		if regex == 'position':
+			return 'N/A'
+		else:
+			return float(0)
 
 
 def GetPlayerStat(teamID, teamName, home, content):

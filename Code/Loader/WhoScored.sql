@@ -284,6 +284,7 @@ CREATE TABLE IF NOT EXISTS "PlayerStatistics" (
 "league" TEXT(40) NOT NULL,
 "match_id" INTEGER NOT NULL,
 "home" INTEGER NOT NULL,
+"position" TEXT(10) NOT NULL,
 "accurate_back_zone_pass" REAL NOT NULL,
 "accurate_chipped_pass" REAL NOT NULL,
 "accurate_corners_intobox" REAL NOT NULL,
