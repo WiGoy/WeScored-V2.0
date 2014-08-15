@@ -8,3 +8,10 @@
 '''
 Dir_Root = 'E:\\WhoScoredRoot\\'
 Fn_Database = 'WhoScored.db'
+
+
+'''
+常用数据库搜索语句
+'''
+Player_Mins = 2400
+Player_Search = 'SELECT player_id, player_name, team_name, position, '

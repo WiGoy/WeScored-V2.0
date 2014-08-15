@@ -74,10 +74,12 @@ def UpdateMatchInfo(season, league, matchID, cursorObj):
 	InsertTeamStatistics(cursorObj, matchInfo.id, matchInfo.league, 0, matchInfo.awayTeamStat)
 		
 	for playerStat in matchInfo.homeTeamPlayerStat:
-		InsertPlayerStatistics(cursorObj, matchInfo.id, matchInfo.league, 1, matchInfo.homeTeamStat.id, matchInfo.homeTeamStat.name, playerStat)
+		if playerStat.position != 'N/A':
+			InsertPlayerStatistics(cursorObj, matchInfo.id, matchInfo.league, 1, matchInfo.homeTeamStat.id, matchInfo.homeTeamStat.name, playerStat)
 		
 	for playerStat in matchInfo.awayTeamPlayerStat:
-		InsertPlayerStatistics(cursorObj, matchInfo.id, matchInfo.league, 0, matchInfo.awayTeamStat.id, matchInfo.awayTeamStat.name, playerStat)
+		if playerStat.position != 'N/A':
+			InsertPlayerStatistics(cursorObj, matchInfo.id, matchInfo.league, 0, matchInfo.awayTeamStat.id, matchInfo.awayTeamStat.name, playerStat)
 
 
 def GetLastMatchID(season, league, cursorObj):
