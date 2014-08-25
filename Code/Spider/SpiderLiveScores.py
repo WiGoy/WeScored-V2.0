@@ -12,7 +12,9 @@ def DateBefore(year, week):
 	nowYear = int(time.strftime("%Y",time.localtime()))
 	nowWeek = int(time.strftime("%W",time.localtime()))
 	
-	if int(year[0:4]) <= nowYear and week <= nowWeek:
+	if int(year[0:4]) < nowYear:
+		return True
+	elif int(year[0:4]) == nowYear and week <= nowWeek:
 		return True
 	else:
 		return False
