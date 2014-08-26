@@ -1,0 +1,69 @@
+﻿{% extends "layout.html" %}
+{% block body %}
+<script type="text/javascript">
+	$(function() {
+		var change_seasonorleague = function(e) {
+			$.getJSON($SCRIPT_ROOT + '/_get_teams', {
+				season:$('select[id="Season"]').val(),
+				league:$('select[id="League"]').val()
+			},
+			function(data) {
+				$('select#Teams').empty();
+				$('select#Players').empty();
+				for (var i = 0; i < data.result.length; i++) {
+					var option = $("<option>").val(data.result[i][0]).text(data.result[i][1]);
+					$('select#Teams').append(option);
+				}
+			});
+		};
+		
+		var change_team = function(e) {
+			$.getJSON($SCRIPT_ROOT + '/_get_players', {
+				season:$('select[id="Season"]').val(),
+				teamid:$('select[id="Teams"]').val()
+			},
+			function(data) {
+				$('select#Players').empty();
+				for (var i = 0; i < data.result.length; i++) {
+					var option = $("<option>").val(data.result[i][0]).text(data.result[i][1]);
+					$('select#Players').append(option);
+				}
+			});
+		};
+		
+		var scan_player = function(e) {
+			$.getJSON($SCRIPT_ROOT + '/_scan_player', {
+				season:$('select[id="Season"]').val(),
+				playerid:$('select[id="Players"]').val()
+			},
+			function(data) {
+				$('img#Radar').attr("src", data.result);
+			});
+		};
+		
+		$('select#Season').bind('change', change_seasonorleague);
+		$('select#League').bind('change', change_seasonorleague);
+		$('select#Teams').bind('change', change_team);
+		$('button#Scan').bind('click', scan_player);
+	});
+</script>
+<h1>Welcome to WeScored!</h1>
+<p>
+<select id="Season">
+	<option value="1314">13/14</option>
+	<option value="1415">14/15</option>
+</select>
+<select id="League">
+	<option value="England_BarclaysPL">英超</option>
+	<option value="Spain_LigaBBVA">西甲</option>
+	<option value="Germany_Bundesliga">德甲</option>
+	<option value="France_Ligue1">法甲</option>
+	<option value="Italy_SerieA">意甲</option>
+</select>
+<select id="Teams"></select>
+<select id="Players"></select>
+<p>
+<button id="Scan">确定</button>
+<p>
+<img id="Radar" width="240px" height="240px"></img>
+{% endblock %}
