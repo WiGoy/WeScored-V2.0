@@ -1,13 +1,19 @@
 ﻿'''
 生成雷达图
 '''
+import random
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
 from matplotlib.spines import Spine
 from matplotlib.projections.polar import PolarAxes
 from matplotlib.projections import register_projection
+from matplotlib.pyplot import plot, savefig
+
+import Global
 
 
 def radar_factory(num_vars, frame='circle'):
@@ -104,26 +110,24 @@ def unit_poly_verts(theta):
 	verts = [(r * np.cos(t) + x0, r * np.sin(t) + y0) for t in theta]
 	return verts
 
+	
+def GetRadarChartFp():
+	'''
+	生成雷达图的文件名
+	'''
+	chars = random.sample('abcdefghijklmnopqrstuvwxyz1234567890', 8)
+	fnMap = ''
+	for char in chars:
+		fnMap += str(char)
+	
+	fpMap = Global.Dir_RadarChart + fnMap + '.png'
+	return fpMap
+	
 
-def example_data():
-	data = {
-		'column names':
-			['goal_assist_openplay', 'att_assist_openplay', 'big_chance_created', 'accurate_through_ball', 'accurate_layoffs', 'successful_final_third_passes', 'goal_normal', 'was_fouled', 'won_contest', 'touches per turnover','crossing %', 'passing %'],
-		'Max':
-			[0.44, 2.4, 0.75, 0.67, 7.35, 28.25, 0.94, 3.75, 4.94, 98.2, 43.54, 92.62],
-		'Min':
-			[0, 0, 0, 0, 0, 0.12, 0, 0, 0, 13.457, 12.94, 62.71],
-		'PlayerStats':
-			[[0.26, 2.26, 0.41, 0.59, 4.33, 27.96, 0.26, 1.52, 1.07, 71.5088, 31.49, 87.21],
-			[0.09, 1.42, 0.39, 0.39, 1.64, 15.58, 0.15, 1.24, 1.79, 45.9083, 31.11, 79.89],
-			[0.17, 2.4, 0.26, 0.2, 1.97, 21.14, 0.29, 2.54, 3.77, 35.1724, 14.67, 83.03],
-			[0.25, 2.04, 0.18, 0.36, 3.61, 28.25, 0.18, 0.89, 1.75, 33.9912, 37.3, 87.29]]}
-			
-	return data
-
-
-def ShowMap(data):
-
+def Drawing(playerNames, data):
+	'''
+	根据数据绘制雷达图
+	'''
 	spokeLabels = data.pop('Property')
 	max = data.pop('Max')
 	min = data.pop('Min')
@@ -143,57 +147,21 @@ def ShowMap(data):
 	colors = ['b', 'r']
 	
 	ax = fig.add_subplot(1, 1, 1, projection='radar')
-	ax.set_varlabels(spokeLabels)
+	
 	ax.set_ylim(0, 100)
 	
 	for d, color in zip(valueShow, colors):
 		ax.plot(theta, d, color=color)
 		ax.fill(theta, d, facecolor=color, alpha=0.2)
 	
-	labels = ('Luis Suárez', 'Lionel Messi')
-	legend = plt.legend(labels, loc=(0.85, 1))
+	ax.set_varlabels(spokeLabels)
+	
+	legend = plt.legend(playerNames, loc=(0.85, 1))
 	plt.setp(legend.get_texts(), fontsize='small')
-	plt.show()
-
 	
-if __name__ == '__main__':
-	N = 12
-	theta = radar_factory(N, frame='polygon')
+	fpMap = GetRadarChartFp()
+	filePng = open(fpMap, 'w')
+	savefig(filePng)
+	filePng.close()
 	
-	data = example_data()
-	spoke_labels = data.pop('column names')
-	max =  data.pop('Max')
-	min =  data.pop('Min')
-	playerStats = data.pop('PlayerStats')
-	
-	fig = plt.figure(figsize=(10, 10))
-	
-	colors = ['b', 'r', 'black', 'y']
-	
-	ax = fig.add_subplot(1, 1, 1, projection='radar')
-	ax.set_varlabels(spoke_labels)
-	ax.set_ylim(0, 100)
-	playerNewStats = []
-	for player in playerStats:
-		playernew = []
-		for n in range(N):
-			y = round(((player[n] - min[n]) / (max[n] - min[n])) * 100, 2)
-			playernew.append(y)
-		
-		playerNewStats.append(playernew)
-	for d, color in zip(playerNewStats, colors):
-		ax.plot(theta, d, color=color)
-		ax.fill(theta, d, facecolor=color, alpha=0.1)
-		print(d)
-	
-	labels = ('David Silva', 'Philippe Coutinho', 'Eden Hazard', 'Mesut Özil')
-	legend = plt.legend(labels, loc=(0.9, .95), labelspacing=0.1)
-	plt.setp(legend.get_texts(), fontsize='small')
-	'''
-	for d, color in zip(playerNewStats, colors):
-		print(d)
-		ax.plot(theta, d, color=color)
-		#ax.fill(theta, d, facecolor=color, alpha=0.25)
-		break
-	'''
-	plt.show()
+	return fpMap

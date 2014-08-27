@@ -1,0 +1,81 @@
+﻿body {
+	text-align: center;
+}
+
+h1  {
+	font-family: Georgia, Verdana;
+	font-size: 2em;
+	color: #377ba8;
+	text-align: center;
+	margin: 0;
+	border-bottom: 2px solid #377ba8;
+}
+
+div {
+	margin: 0 auto;
+	text-align: center;
+}
+#main {
+	width: 300px;
+	height: auto;
+}
+#divSelect {
+	width: 300px;
+	height: auto;
+	border:1px solid #FFF
+}
+#divSelect1 {
+	width: 195px;
+	float: left;
+	text-align: left;
+	margin-left: 5px;
+}
+#divSelect2 {
+	width: 85px;
+	height: 85px;
+	float: right;
+	margin-top: 7.5px;
+	margin-right: 7.5px;
+}
+
+select {
+	font-family: Microsoft YaHei, Georgia;
+	font-size: 0.8em;
+	height: 30px;
+	margin-top: 2.5px;
+	margin-bottom: 2.5px;
+}
+#Season {
+	width: 110px;
+	margin-left: 2.5px;
+}
+#League {
+	width: 70px;
+	margin-left: 2.5px;
+}
+#Teams {
+	width: 190px;
+	margin-left: 2.5px;
+}
+#Players {
+	width: 190px;
+	margin-left: 2.5px;
+}
+
+input:focus {
+    outline: none;
+}
+#Drawing {
+	width: 85px;
+	height: 85px;
+	border: 0;
+	background: url(button.jpg);
+	background-size: cover;
+	background-color: transparent;
+}
+
+#Radar {
+	width: 100%;
+	height: auto;
+	text-align: center;
+}

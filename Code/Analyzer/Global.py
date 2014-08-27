@@ -6,8 +6,10 @@
 '''
 路径和文件名
 '''
-Dir_Root = 'E:\\WhoScoredRoot\\'
+Dir_Root = 'C:\\WorkSpace\\GitHub\\WhoScoredRoot\\'
+Dir_RadarChart = 'static/RadarCharts/'
 Fn_Database = 'WhoScored.db'
+
 
 
 '''

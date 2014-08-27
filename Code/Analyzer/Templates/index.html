@@ -1,0 +1,29 @@
+﻿{% extends "layout.html" %}
+{% block body %}
+<h1>Welcome to WeScored</h1>
+<p>
+<div id="main">
+	<div id="divSelect">
+		<div id="divSelect1">
+			<select id="Season">
+				<option value="1314">2013/2014</option>
+				<option value="1415">2014/2015</option>
+			</select>
+			<select id="League">
+				<option value="League">联赛</option>
+				<option value="England_BarclaysPL">英超</option>
+				<option value="Spain_LigaBBVA">西甲</option>
+				<option value="Germany_Bundesliga">德甲</option>
+				<option value="France_Ligue1">法甲</option>
+				<option value="Italy_SerieA">意甲</option>
+			</select>
+			<select id="Teams"><option>球队</option></select>
+			<select id="Players"><option>球员</option></select>
+		</div>
+		<div id="divSelect2">
+			<input id="Drawing" type="button"/>
+		</div>
+	</div>
+	<img id="Radar"></img>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+<!doctype html>
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<title>Welcome to WeScored</title>
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='wescored.css')}}">
+	<script type=text/javascript src="{{url_for('static', filename='jquery-2.1.1.min.js')}}"></script>
+	<script type=text/javascript src="{{url_for('static', filename='wescored.js')}}"></script>
+	<script type="text/javascript">var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+{% block body %}
+{% endblock %}

@@ -1,4 +1,7 @@
-﻿import DAL
+﻿'''
+定义用于球员雷达图的数据类型
+'''
+import DAL
 
 
 class AccurateLayoffs():

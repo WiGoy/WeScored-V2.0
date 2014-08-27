@@ -1,5 +1,59 @@
-﻿import sqlite3
+﻿'''
+与数据库交互
+'''
+import sqlite3
 import Global
+
+
+def GetPlayerName(season, playerID):
+	'''
+	根据球员ID获取姓名
+	'''
+	fpDatabase = Global.Dir_Root + season + '\\' + Global.Fn_Database
+	conn = sqlite3.connect(fpDatabase)
+	cursorObj = conn.cursor()
+	
+	strSearch = 'SELECT player_name FROM PlayerStatistics WHERE player_id = ' + str(playerID) + ' Group By player_id'
+	cursorObj.execute(strSearch)
+	playerName = cursorObj.fetchone()
+	
+	cursorObj.close()
+	conn.close()
+	return playerName
+
+
+def GetTeamList(season, league):
+	'''
+	获取某个联赛的球队
+	'''
+	fpDatabase = Global.Dir_Root + season + '\\' + Global.Fn_Database
+	conn = sqlite3.connect(fpDatabase)
+	cursorObj = conn.cursor()
+	
+	strSearch = 'SELECT team_id, team_name, league FROM TeamStatistics WHERE league = \"' + league + '\" Group By team_id ORDER BY team_name ASC'
+	cursorObj.execute(strSearch)
+	teamList = cursorObj.fetchall()
+	
+	cursorObj.close()
+	conn.close()
+	return teamList
+
+
+def GetPlayerList(season, teamID):
+	'''
+	获取某个球队的球员
+	'''
+	fpDatabase = Global.Dir_Root + season + '\\' + Global.Fn_Database
+	conn = sqlite3.connect(fpDatabase)
+	cursorObj = conn.cursor()
+	
+	strSearch = 'SELECT player_id, player_name, team_id FROM PlayerStatistics WHERE team_id = ' + str(teamID) + ' Group By player_id ORDER BY player_name ASC'
+	cursorObj.execute(strSearch)
+	playerList = cursorObj.fetchall()
+	
+	cursorObj.close()
+	conn.close()
+	return playerList
 
 
 def GetMaxPercentage1(season, property1, property2, propertyRange, range):
